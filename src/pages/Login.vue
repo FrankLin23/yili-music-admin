@@ -3,10 +3,10 @@
     <div class="q-pa-md">
       <q-card class="login-form-box">
         <div class="title">原力音乐后台</div>
-        <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
+        <q-form @submit="onSubmit(username, password)" class="q-gutter-md">
           <q-input
             filled
-            v-model="name"
+            v-model="username"
             label="用户名："
             lazy-rules
             :rules="[(val) => (val && val.length > 0) || '请输入用户名']"
@@ -14,7 +14,7 @@
           <q-input
             filled
             type="password"
-            v-model="age"
+            v-model="password"
             label="密码："
             lazy-rules
             :rules="[(val) => (val && val.length > 0) || '请输入密码']"
@@ -37,31 +37,24 @@
 </template>
 
 <script setup>
-import { useQuasar } from "quasar";
 import { ref } from "vue";
+import { useStore } from "vuex";
+import { useRouter, useRoute } from "vue-router";
 
-const $q = useQuasar();
-
-const name = ref(null);
-const age = ref(null);
+const password = ref("");
+const username = ref("");
 const accept = ref(false);
 
-const onSubmit = () => {
-  if (accept.value !== true) {
-    $q.notify({
-      color: "red-5",
-      textColor: "white",
-      icon: "warning",
-      message: "You need to accept the license and terms first",
+const store = useStore();
+const router = useRouter();
+const route = useRoute();
+
+const onSubmit = (username, password) => {
+  store.dispatch("user/login", { username, password }).then(() => {
+    store.dispatch("/user/fetchCurrentUser").then(() => {
+      router.push({ path: route.query.redirect || "/" });
     });
-  } else {
-    $q.notify({
-      color: "green-4",
-      textColor: "white",
-      icon: "cloud_done",
-      message: "Submitted",
-    });
-  }
+  });
 };
 </script>
 
