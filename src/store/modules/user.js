@@ -3,6 +3,7 @@ import {
   removeCurrentUser,
   removeToken,
   setCurrentUser,
+  setToken,
 } from "../../utils/auth.js";
 import { login } from "../../api/user.js";
 
@@ -22,15 +23,17 @@ const getters = {
 const actions = {
   login({ commit }, { username, password }) {
     return new Promise((resolve, reject) => {
-      login(username.trim(), password)
+      login(username, password)
         .then((response) => {
           const { data } = response;
-          console.log(data);
-          // commit("SET_TOKEN", token);
-          // setToken(token);
-          // resolve();
+          //console.log(data);
+          console.log("123");
+          commit("SET_TOKEN", data.token);
+          setToken(data.token);
+          resolve();
         })
         .catch((error) => {
+          console.log(error);
           reject(error);
         });
     });

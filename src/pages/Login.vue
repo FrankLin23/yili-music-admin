@@ -51,9 +51,8 @@ const route = useRoute();
 
 const onSubmit = (username, password) => {
   store.dispatch("user/login", { username, password }).then(() => {
-    store.dispatch("/user/fetchCurrentUser").then(() => {
-      router.push({ path: route.query.redirect || "/" });
-    });
+    console.log("12345");
+    router.push({ path: route.query.redirect || "/" });
   });
 };
 </script>

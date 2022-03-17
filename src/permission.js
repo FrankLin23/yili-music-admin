@@ -12,21 +12,7 @@ router.beforeEach(async (to, from, next) => {
     if (to.path === "/login") {
       next({ path: "/" });
     } else {
-      const currentUser = store.state.user.currentUser;
-      const adminRole = currentUser.roles.find((item) => {
-        return item.name === "ROLE_ADMIN";
-      });
-      if (adminRole) {
-        next();
-      } else {
-        await store.dispatch("user/logout");
-        Notify.create({
-          type: "negative",
-          message: "你无权限访问后台",
-          position: "top",
-        });
-        next(`/login?redirect=${to.path}`);
-      }
+      next();
     }
   } else {
     if (whiteList.indexOf(to.path) !== -1) {
